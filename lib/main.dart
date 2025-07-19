@@ -10,6 +10,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Toonflix', home: const LoginScreen());
+    return MaterialApp(
+      title: 'Toonflix',
+      theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
+      darkTheme: ThemeData(brightness: Brightness.dark, useMaterial3: true),
+      themeMode: ThemeMode.dark, // 시스템 설정을 따름
+      home: const LoginScreen(),
+    );
   }
 }

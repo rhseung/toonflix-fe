@@ -78,27 +78,24 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Toonflix',
-      home: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: onPageChanged,
-          physics: const NeverScrollableScrollPhysics(),
-          children: NavigationTab.values.map((tab) => tab.screen).toList(),
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: NavigationTab.values.indexOf(_currentTab),
-          onDestinationSelected: onNavTap,
-          destinations: NavigationTab.values
-              .map(
-                (tab) => NavigationDestination(
-                  icon: tab.icon,
-                  label: tab.name.capitalizeFirstLetter(),
-                ),
-              )
-              .toList(),
-        ),
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: onPageChanged,
+        physics: const NeverScrollableScrollPhysics(),
+        children: NavigationTab.values.map((tab) => tab.screen).toList(),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: NavigationTab.values.indexOf(_currentTab),
+        onDestinationSelected: onNavTap,
+        destinations: NavigationTab.values
+            .map(
+              (tab) => NavigationDestination(
+                icon: tab.icon,
+                label: tab.name.capitalizeFirstLetter(),
+              ),
+            )
+            .toList(),
       ),
     );
   }
