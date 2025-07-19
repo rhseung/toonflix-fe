@@ -14,10 +14,9 @@ class LoginScreen extends StatelessWidget {
           children: [
             Text(
               'Toonflix',
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 60),
             TextField(
