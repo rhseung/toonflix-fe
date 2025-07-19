@@ -8,15 +8,17 @@ part of 'post_entity.dart';
 
 PostEntity _$PostEntityFromJson(Map<String, dynamic> json) => PostEntity(
   id: (json['id'] as num).toInt(),
-  title: json['title'] as String,
   content: json['content'] as String,
   authorId: (json['authorId'] as num).toInt(),
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$PostEntityToJson(PostEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'title': instance.title,
       'content': instance.content,
       'authorId': instance.authorId,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
     };
