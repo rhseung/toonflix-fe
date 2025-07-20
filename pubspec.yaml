@@ -38,6 +38,8 @@ dependencies:
   retrofit: ^4.6.0
   chopper: ^8.0.0
   json_annotation: ^4.8.0
+  flutter_secure_storage: ^9.2.2
+  logger: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

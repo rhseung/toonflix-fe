@@ -1,10 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:toonflix_fe/model/api/retrofit_client.dart';
-import 'package:toonflix_fe/model/entity/post_entity.dart';
-import 'package:toonflix_fe/model/entity/user_entity.dart';
-import 'package:toonflix_fe/model/repo/post_repository.dart';
-import 'package:toonflix_fe/model/repo/user_repository.dart';
+import 'package:toonflix_fe/util/error_handler.dart';
+import 'package:toonflix_fe/viewmodel/home_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,54 +10,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final PostRepository _postRepository = PostRepository(RetrofitClient(Dio()));
-  final UserRepository _userRepository = UserRepository(RetrofitClient(Dio()));
-  List<PostEntity> posts = [];
-  Map<int, UserEntity> users = {}; // 사용자 정보를 캐시하기 위한 맵
-  bool isLoading = true;
+  late final HomeViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    _loadPosts();
+    _viewModel = HomeViewModel();
+    _viewModel.addListener(_onViewModelChanged);
+    _viewModel.loadPosts();
   }
 
-  Future<void> _loadPosts() async {
-    try {
-      final fetchedPosts = await _postRepository.getPosts();
+  @override
+  void dispose() {
+    _viewModel.removeListener(_onViewModelChanged);
+    _viewModel.dispose();
+    super.dispose();
+  }
 
-      // 각 포스트의 작성자 정보를 가져옴
-      final userFutures = fetchedPosts
-          .map((post) => post.authorId)
-          .toSet() // 중복 제거
-          .map((authorId) => _userRepository.getUser(authorId));
-
-      final fetchedUsers = await Future.wait(userFutures);
-
-      // 사용자 정보를 맵에 저장
-      final userMap = <int, UserEntity>{};
-      for (final user in fetchedUsers) {
-        userMap[user.id] = user;
-      }
-
-      if (mounted) {
-        setState(() {
-          posts = fetchedPosts;
-          users = userMap;
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-        // 에러 처리 - 스낵바로 사용자에게 알림
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('포스트를 불러오는데 실패했습니다: $e')));
-      }
+  void _onViewModelChanged() {
+    if (mounted && _viewModel.hasError) {
+      ErrorHandler.showErrorSnackBar(context, _viewModel.errorMessage!);
     }
+    setState(() {});
   }
 
   @override
@@ -73,12 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 5,
         centerTitle: false,
       ),
-      body: isLoading
+      body: _viewModel.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : posts.isEmpty
+          : _viewModel.isEmpty
           ? const Center(child: Text('포스트가 없습니다'))
           : RefreshIndicator(
-              onRefresh: _loadPosts,
+              onRefresh: _viewModel.refresh,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
@@ -86,19 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   itemBuilder: (context, index) {
-                    final post = posts[index];
-                    final user = users[post.authorId];
+                    final post = _viewModel.posts[index];
                     return Card(
                       elevation: 0,
                       child: ListTile(
                         leading: CircleAvatar(
                           child: Text(
-                            user?.name.substring(0, 1).toUpperCase() ?? '?',
+                            _viewModel.getUserAvatarText(post),
                             style: const TextStyle(fontSize: 20),
                           ),
                         ),
                         title: Text(
-                          user?.name ?? 'Unknown User',
+                          _viewModel.getUserName(post),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
@@ -108,10 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           softWrap: true,
                         ),
                         onTap: () {
-                          // 포스트 클릭 시 토스트 표시
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('포스트 "${post.id}" 클릭됨'),
+                              content: Text(
+                                _viewModel.getPostClickMessage(post),
+                              ),
                               duration: const Duration(seconds: 2),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -120,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  itemCount: posts.length,
+                  itemCount: _viewModel.posts.length,
                 ),
               ),
             ),

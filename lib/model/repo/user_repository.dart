@@ -14,6 +14,8 @@ class UserRepository {
 
   Future<UserEntity> getUser(int id) => _api.getUser(id);
 
+  Future<UserEntity> getUserByEmail(String email) => _api.getUserByEmail(email);
+
   Future<UserEntity> updateUser(int id, UpdateUserDto user) =>
       _api.updateUser(id, user);
 

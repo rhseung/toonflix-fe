@@ -1,8 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix_fe/model/api/api_client.dart';
+import 'package:toonflix_fe/service/navigation_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  void logoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('로그아웃'),
+          content: const Text('정말 로그아웃하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // 다이얼로그 닫기
+                Navigator.of(context).pop();
+
+                // 토큰 제거
+                await ApiClient.clearToken();
+
+                // 로그인 화면으로 이동 (스택 초기화)
+                await NavigationService.navigateToLogin();
+              },
+              child: const Text('로그아웃'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,6 +44,10 @@ class ProfileScreen extends StatelessWidget {
         title: const Text("Rhseung"),
         actions: [
           IconButton(icon: Icon(Icons.settings_rounded), onPressed: () {}),
+          IconButton(
+            icon: Icon(Icons.logout_rounded),
+            onPressed: () => logoutDialog(context),
+          ),
         ],
         elevation: 5,
         centerTitle: false,

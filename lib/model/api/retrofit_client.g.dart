@@ -20,6 +20,27 @@ class _RetrofitClient implements RetrofitClient {
   final ParseErrorLogger? errorLogger;
 
   @override
+  Future<dynamic> getRoot() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<dynamic>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
   Future<PostEntity> createPost(CreatePostDto post) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -187,6 +208,33 @@ class _RetrofitClient implements RetrofitClient {
   }
 
   @override
+  Future<UserEntity> getCurrentUser() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<UserEntity>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/users/me',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UserEntity _value;
+    try {
+      _value = UserEntity.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<List<UserEntity>> getUsers() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -226,6 +274,33 @@ class _RetrofitClient implements RetrofitClient {
           .compose(
             _dio.options,
             '/users/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UserEntity _value;
+    try {
+      _value = UserEntity.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<UserEntity> getUserByEmail(String email) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<UserEntity>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/users/email/${email}',
             queryParameters: queryParameters,
             data: _data,
           )
