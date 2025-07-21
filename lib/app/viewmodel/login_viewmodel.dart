@@ -63,14 +63,12 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  // 폼 초기화
   void clearForm() {
     _emailController.clear();
     _passwordController.clear();
     _clearError();
   }
 
-  // Private methods
   void _setLoading(bool loading) {
     _isLoading = loading;
     if (!_disposed) {
