@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:toonflix_fe/model/api/api_client.dart';
-import 'package:toonflix_fe/model/api/retrofit_client.dart';
-import 'package:toonflix_fe/model/dto/login_dto.dart';
-import 'package:toonflix_fe/model/repo/auth_repository.dart';
+import 'package:toonflix_fe/app/model/api/api_client.dart';
+import 'package:toonflix_fe/app/model/api/retrofit_client.dart';
+import 'package:toonflix_fe/app/model/dto/login_dto.dart';
+import 'package:toonflix_fe/app/model/repo/auth_repository.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthRepository _authRepository = AuthRepository(RetrofitClient(Dio()));
@@ -12,27 +12,24 @@ class LoginViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   String? _errorMessage;
+  bool _disposed = false;
 
-  // Getters
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get hasError => _errorMessage != null;
 
-  // 입력 유효성 검사
   bool get isFormValid {
     return _emailController.text.trim().isNotEmpty &&
         _passwordController.text.isNotEmpty;
   }
 
-  // 이메일 유효성 검사 (간단한 형태)
   bool get isEmailValid {
     final email = _emailController.text.trim();
     return email.isNotEmpty && email.contains('@');
   }
 
-  // 로그인 수행
   Future<bool> login() async {
     if (!isFormValid) {
       _setError('이메일과 비밀번호를 입력해주세요');
@@ -55,7 +52,6 @@ class LoginViewModel extends ChangeNotifier {
 
       final loginResult = await _authRepository.login(loginDto);
 
-      // 로그인 성공 시 토큰 저장
       await ApiClient.saveToken(loginResult.accessToken);
 
       return true;
@@ -77,17 +73,23 @@ class LoginViewModel extends ChangeNotifier {
   // Private methods
   void _setLoading(bool loading) {
     _isLoading = loading;
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   void _setError(String error) {
     _errorMessage = error;
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   void _clearError() {
     _errorMessage = null;
-    notifyListeners();
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   String _getLoginErrorMessage(dynamic error) {
@@ -119,6 +121,7 @@ class LoginViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

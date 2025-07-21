@@ -1,7 +1,7 @@
-import 'package:toonflix_fe/model/api/retrofit_client.dart';
-import 'package:toonflix_fe/model/dto/create_user_dto.dart';
-import 'package:toonflix_fe/model/dto/update_user_dto.dart';
-import 'package:toonflix_fe/model/entity/user_entity.dart';
+import 'package:toonflix_fe/app/model/api/retrofit_client.dart';
+import 'package:toonflix_fe/app/model/dto/create_user_dto.dart';
+import 'package:toonflix_fe/app/model/dto/update_user_dto.dart';
+import 'package:toonflix_fe/app/model/entity/user_entity.dart';
 
 class UserRepository {
   final RetrofitClient _api;
@@ -11,6 +11,8 @@ class UserRepository {
   Future<UserEntity> createUser(CreateUserDto user) => _api.createUser(user);
 
   Future<List<UserEntity>> getUsers() => _api.getUsers();
+
+  Future<UserEntity> getCurrentUser() => _api.getCurrentUser();
 
   Future<UserEntity> getUser(int id) => _api.getUser(id);
 

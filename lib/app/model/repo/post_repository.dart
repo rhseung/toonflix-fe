@@ -1,7 +1,7 @@
-import 'package:toonflix_fe/model/api/retrofit_client.dart';
-import 'package:toonflix_fe/model/dto/create_post_dto.dart';
-import 'package:toonflix_fe/model/dto/update_post_dto.dart';
-import 'package:toonflix_fe/model/entity/post_entity.dart';
+import 'package:toonflix_fe/app/model/api/retrofit_client.dart';
+import 'package:toonflix_fe/app/model/dto/create_post_dto.dart';
+import 'package:toonflix_fe/app/model/dto/update_post_dto.dart';
+import 'package:toonflix_fe/app/model/entity/post_entity.dart';
 
 class PostRepository {
   final RetrofitClient _api;

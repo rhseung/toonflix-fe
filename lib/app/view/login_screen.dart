@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix_fe/service/navigation_service.dart';
-import 'package:toonflix_fe/viewmodel/login_viewmodel.dart';
+import 'package:toonflix_fe/app/viewmodel/login_viewmodel.dart';
+import 'package:toonflix_fe/app/model/service/navigation_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,13 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onViewModelChanged() {
     if (mounted && _viewModel.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_viewModel.errorMessage!),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(_viewModel.errorMessage!)));
     }
     setState(() {});
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix_fe/viewmodel/main_viewmodel.dart';
+import 'package:toonflix_fe/app/viewmodel/main_viewmodel.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

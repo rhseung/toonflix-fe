@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toonflix_fe/util/error_handler.dart';
-import 'package:toonflix_fe/viewmodel/home_viewmodel.dart';
+import 'package:toonflix_fe/app/viewmodel/home_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

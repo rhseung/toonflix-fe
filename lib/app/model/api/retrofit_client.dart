@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:toonflix_fe/model/dto/create_post_dto.dart';
-import 'package:toonflix_fe/model/dto/create_user_dto.dart';
-import 'package:toonflix_fe/model/dto/login_dto.dart';
-import 'package:toonflix_fe/model/dto/update_post_dto.dart';
-import 'package:toonflix_fe/model/dto/update_user_dto.dart';
-import 'package:toonflix_fe/model/entity/login_entity.dart';
-import 'package:toonflix_fe/model/entity/post_entity.dart';
-import 'package:toonflix_fe/model/entity/user_entity.dart';
+import 'package:toonflix_fe/app/model/dto/create_post_dto.dart';
+import 'package:toonflix_fe/app/model/dto/create_user_dto.dart';
+import 'package:toonflix_fe/app/model/dto/login_dto.dart';
+import 'package:toonflix_fe/app/model/dto/update_post_dto.dart';
+import 'package:toonflix_fe/app/model/dto/update_user_dto.dart';
+import 'package:toonflix_fe/app/model/entity/login_entity.dart';
+import 'package:toonflix_fe/app/model/entity/post_entity.dart';
+import 'package:toonflix_fe/app/model/entity/user_entity.dart';
 
 part 'retrofit_client.g.dart';
 
